@@ -103,8 +103,13 @@ async fn process_request(client: &mut XrpcClient, request: BotRequest) -> Result
         .await?
         .thread;
 
-    let child = thread.post;
-    let Some(parent) = thread.parent.map(|it| it.post) else {
+    let Some(child) = thread.post else {
+        event!(Level::WARN, "Invalid request. Child post not found");
+        return Ok(BotRequestResult::InvalidRequest);
+    };
+
+    let Some(parent) = thread.parent.and_then(|it| it.post) else {
+        event!(Level::WARN, "Invalid request. Parent post not found");
         return Ok(BotRequestResult::InvalidRequest);
     };
 

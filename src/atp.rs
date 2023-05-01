@@ -354,7 +354,7 @@ pub struct GetPostThread {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ThreadView {
-    pub post: PostView,
+    pub post: Option<PostView>,
     pub parent: Option<Box<ThreadView>>,
     #[serde(default)]
     pub replies: Vec<ThreadView>,
